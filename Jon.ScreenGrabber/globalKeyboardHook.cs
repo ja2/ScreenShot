@@ -9,8 +9,7 @@ using System.Windows.Forms;
  * http://www.codeproject.com/Articles/19004/A-Simple-C-Global-Low-Level-Keyboard-Hook
  * 
  * Some adaptations may have been made:
- * Handles modifier keys (not quite perfect - eg if press both shift keys at once and lift one, it won't notice the other is held).
- * Modifier code based on functions from here: http://www.codeproject.com/Articles/14485/Low-level-Windows-API-hooks-from-C-to-stop-unwante
+ * Handles modifier keys. Modifier code based on functions from here: http://www.codeproject.com/Articles/14485/Low-level-Windows-API-hooks-from-C-to-stop-unwante
  * 
 */
 
