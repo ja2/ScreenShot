@@ -120,7 +120,7 @@ namespace Jon.ScreenGrabber{
 				if (HookedKeys.Contains(key)) {
 
                     //Get modifiers
-                    key = AddModifiers(ref key);
+                    key = AddModifiers(key);
                                         
        				KeyEventArgs kea = new KeyEventArgs(key);
                     
@@ -146,7 +146,7 @@ namespace Jon.ScreenGrabber{
         private Keys AddModifiers(Keys key)
         {
       	    //CapsLock
-            if ((GetKeyState(VK_CAPITAL) & 0x0001) != 0) key = key | Keys.CapsLock
+            if ((GetKeyState(VK_CAPITAL) & 0x0001) != 0) key = key | Keys.CapsLock;
             
             //Shift
             if ((GetKeyState(VK_SHIFT) & 0x8000) != 0) key = key | Keys.Shift;
