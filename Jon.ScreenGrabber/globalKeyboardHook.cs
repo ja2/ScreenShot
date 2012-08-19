@@ -120,7 +120,7 @@ namespace Jon.ScreenGrabber{
 				if (HookedKeys.Contains(key)) {
 
                     //Get modifiers
-                    AddModifiers(ref key);
+                    key = AddModifiers(ref key);
                                         
        				KeyEventArgs kea = new KeyEventArgs(key);
                     
@@ -140,38 +140,26 @@ namespace Jon.ScreenGrabber{
         #region Check Modifier keys
         /// <summary>
         /// Checks whether Alt, Shift, Control or CapsLock
-        /// is enabled at the same time as another key.
-        /// Modify the relevant sections and return type 
-        /// depending on what you want to do with modifier keys.
+        /// is pressed at the same time as the hooked key.
+        /// Modifies the keyCode to include the pressed keys.
         /// </summary>
-        private void AddModifiers(ref Keys key)
+        private Keys AddModifiers(Keys key)
         {
-            StringBuilder sb = new StringBuilder();
+      	    //CapsLock
+            if ((GetKeyState(VK_CAPITAL) & 0x0001) != 0) key = key | Keys.CapsLock
+            
+            //Shift
+            if ((GetKeyState(VK_SHIFT) & 0x8000) != 0) key = key | Keys.Shift;
 
-            if ((GetKeyState(VK_CAPITAL) & 0x0001) != 0)
-            {
-                //CAPSLOCK is ON
-                key = key | Keys.CapsLock;
-            }
+            //Ctrl
+            if ((GetKeyState(VK_CONTROL) & 0x8000) != 0) key = key | Keys.Control;
 
-            if ((GetKeyState(VK_SHIFT) & 0x8000) != 0)
-            {
-                //SHIFT is pressed
-                key = key | Keys.Shift;
-            }
-            if ((GetKeyState(VK_CONTROL) & 0x8000) != 0)
-            {
-                //CONTROL is pressed
-                key = key | Keys.Control;
-            }
-            if ((GetKeyState(VK_MENU) & 0x8000) != 0)
-            {
-                //ALT is pressed
-                key = key | Keys.Alt;
-            }
-            Console.WriteLine(sb.ToString());
+            //Alt
+            if ((GetKeyState(VK_MENU) & 0x8000) != 0) key = key | Keys.Alt;
+            
+            return key;
         }
-        #endregion Check Modifier keys
+        #endregion
 
 		#region DLL imports
 		/// <summary>
