@@ -33,7 +33,7 @@ namespace Jon.ScreenGrabber{
 			public int dwExtraInfo;
 		}
 
-		const int WH_KEYBOARD_LL = 13;
+        const int WH_KEYBOARD_LL = 13;
 		const int WM_KEYDOWN = 0x100;
 		const int WM_KEYUP = 0x101;
 		const int WM_SYSKEYDOWN = 0x104;
@@ -144,7 +144,7 @@ namespace Jon.ScreenGrabber{
         /// </summary>
         private Keys AddModifiers(Keys key)
         {
-      	    //CapsLock
+            //CapsLock
             if ((GetKeyState(VK_CAPITAL) & 0x0001) != 0) key = key | Keys.CapsLock;
             
             //Shift
