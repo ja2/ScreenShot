@@ -1,4 +1,4 @@
-﻿namespace Jon.ScreenGrabber
+﻿namespace ScreenShot
 {
     partial class frmMain
     {
@@ -43,13 +43,14 @@
             this.btnHide = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.chkWin = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // notifyIcon
             // 
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
-            this.notifyIcon.Text = "Jon.ScreenGrabber";
+            this.notifyIcon.Text = "ScreenShot";
             this.notifyIcon.Visible = true;
             this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseClick);
             // 
@@ -104,7 +105,7 @@
             // chkRightClick
             // 
             this.chkRightClick.AutoSize = true;
-            this.chkRightClick.Location = new System.Drawing.Point(177, 129);
+            this.chkRightClick.Location = new System.Drawing.Point(177, 143);
             this.chkRightClick.Name = "chkRightClick";
             this.chkRightClick.Size = new System.Drawing.Size(15, 14);
             this.chkRightClick.TabIndex = 5;
@@ -122,7 +123,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(78, 130);
+            this.label2.Location = new System.Drawing.Point(78, 144);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(82, 13);
             this.label2.TabIndex = 7;
@@ -167,11 +168,22 @@
             this.pictureBox1.TabIndex = 12;
             this.pictureBox1.TabStop = false;
             // 
+            // chkWin
+            // 
+            this.chkWin.AutoSize = true;
+            this.chkWin.Location = new System.Drawing.Point(177, 111);
+            this.chkWin.Name = "chkWin";
+            this.chkWin.Size = new System.Drawing.Size(45, 17);
+            this.chkWin.TabIndex = 13;
+            this.chkWin.Text = "Win";
+            this.chkWin.UseVisualStyleBackColor = true;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(282, 258);
+            this.Controls.Add(this.chkWin);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnHide);
@@ -192,7 +204,7 @@
             this.Name = "frmMain";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Jon.ScreenGrabber Settings";
+            this.Text = "ScreenShot Settings";
             this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Load += new System.EventHandler(this.frmMain_Load);
@@ -218,6 +230,7 @@
         private System.Windows.Forms.Button btnHide;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.CheckBox chkWin;
     }
 }
 
