@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
+using System.Diagnostics;
 using Newtonsoft.Json;
 using ScreenShot.Code;
 
@@ -149,6 +149,11 @@ namespace ScreenShot
                 "ScreenShot closing",
                 MessageBoxButtons.OKCancel,
                 MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.Cancel) e.Cancel = true;
+        }
+
+        private void lnkGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://github.com/ja2/ScreenShot");
         }
 
 

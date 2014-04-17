@@ -113,14 +113,14 @@ namespace ScreenShot
         }
 
         /// <summary>
-        /// Constructor sets defaults (S + Alt + Win)
+        /// Constructor sets defaults (S + Shift + Alt)
         /// </summary>
         public ScreenShotConfiguration()
         {            
             Key = 'S';
             Ctrl = false;
-            Win = true;
-            Shift = false;
+            Win = false;
+            Shift = true;
             Alt = true;
             EnableRightClick = true;
         }
