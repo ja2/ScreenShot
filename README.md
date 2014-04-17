@@ -41,7 +41,7 @@ To configure the hotkey, or to toggle the right-click functionality, left-click 
 
 The default hot key is `Shift + Alt + S`, however this may not always work, depending on what other software has set as its own hotkeys/shortcut keys.
 
-I might be necessary to try a few combinations to see what works for you, especially the `Win` key (which probably won't work remotely, but is included for completeness).
+It may be necessary to try a few combinations to see what works for you, especially the `Win` key (which probably won't work remotely, but is included for completeness).
 
 In general, use combinations with at least one of `Shift`, `Alt`, or `Ctrl` as this will give a better chance of avoiding conflict with other software.
 
