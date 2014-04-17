@@ -5,7 +5,7 @@ Screen printing utility.
 
 **Use**
 
-On launch, sits in the notification area and monitors for a defined key combination (default is `Alt-Win-S`) or (optionally) a right click on the application's icon.
+On launch, sits in the notification area and monitors for a defined key combination (default is `Shift + Alt + S`) or (optionally) a right click on the application's icon.
 
 To configure the utility, left click on the icon in the notification area.
 
@@ -31,5 +31,22 @@ To redistribute just take the contents of the bin/Release folder and zip/copy to
 
 At present I don't have anywhere setup to host a downloadable built package, however I'll work to fix that soon.
 
+
+
+**Configuration**
+
+To configure the hotkey, or to toggle the right-click functionality, left-click on the icon in the notification area.
+
+*Choosing a hotkey*
+
+The default hot key is `Shift + Alt + S`, however this may not always work, depending on what other software has set as its own hotkeys/shortcut keys.
+
+I might be necessary to try a few combinations to see what works for you, especially the `Win` key (which probably won't work remotely, but is included for completeness).
+
+In general, use combinations with at least one of `Shift`, `Alt`, or `Ctrl` as this will give a better chance of avoiding conflict with other software.
+
+*Right Click*
+
+There is also the optional use of right-click on the icon in the notification area to take a screenshot. This can be disabled in the settings if required.
 
 
