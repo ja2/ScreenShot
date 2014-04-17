@@ -12,7 +12,9 @@ To configure the utility, left click on the icon in the notification area.
 
 **Er, why?**
 
-When working remotely on corporate networks this gets around the problem of taking screenshots and using them on the remote site. This can be a problem where clipboard sharing has been locked down (such as on remote desktop connections), as the screenshots are normally taken and saved into the local clipboard, not the one in the remote session.
+When working remotely on corporate networks this gets around the problem of taking screenshots and using them on the remote site. This can be a problem where clipboard sharing has been locked down (such as on remote desktop connections), as the screenshots are normally taken and saved into the local clipboard, not the one in the remote session. It can then take couple of emails, possibly from a personal account, to get that screenshot back to be available for use within the remote network.
+
+Instead, using this app, the screenshot is saved to the remote clipboard directly, and can be pasted directly into emails/documents and so on. 
 
 
 
