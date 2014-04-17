@@ -29,7 +29,7 @@ To redistribute just take the contents of the bin/Release folder and zip/copy to
 
 *Download package*
 
-At present I don't have anywhere setup to host a downloadable binary, however I'll work to fix that soon.
+At present I don't have anywhere setup to host a downloadable built package, however I'll work to fix that soon.
 
 
 
