@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\RegistryWorker.cs" />
     <Compile Include="Code\User32API.cs" />
     <Compile Include="Code\Window.cs" />
     <Compile Include="frmMain.cs">

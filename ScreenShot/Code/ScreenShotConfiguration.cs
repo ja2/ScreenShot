@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.ComponentModel;
+using Microsoft.Win32;
 
 using Newtonsoft.Json;
 
@@ -103,7 +104,22 @@ namespace ScreenShot
             }
         }
         private bool _enableRightClick;
-        
+
+        /// <summary>
+        /// Launch the application when the user logs in.
+        /// </summary>
+        /// <remarks>Stored in the the registy on a per-user basis</remarks>
+        public bool LaunchOnLogin
+        {
+            get { return _launchOnLogin; }
+            set
+            {
+                _launchOnLogin = value;
+                InvokePropertyChanged("LaunchOnLogin");
+            }
+        }
+        private bool _launchOnLogin;
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void InvokePropertyChanged(string name)
         {
@@ -123,6 +139,7 @@ namespace ScreenShot
             Shift = true;
             Alt = true;
             EnableRightClick = true;
+            LaunchOnLogin = false;
         }
 
         public override string ToString()
@@ -141,30 +158,45 @@ namespace ScreenShot
         /// </summary>
         /// <param name="path">The source configuration file</param>
         /// <returns></returns>
-        public static ScreenShotConfiguration LoadFrom(string path)
+        public static ScreenShotConfiguration Load(string path)
         {
+            ScreenShotConfiguration ss;
             try
             {
                 //If file exists then load from the file, otherwise use the defaults
                 if (File.Exists(path)) {
                     var json = File.ReadAllText(path);
-                    return JsonConvert.DeserializeObject<ScreenShotConfiguration>(json);
+                    ss = JsonConvert.DeserializeObject<ScreenShotConfiguration>(json);
                 } else {
-                    return new ScreenShotConfiguration();
+                    ss = new ScreenShotConfiguration();
                 }
 
             }
             catch (Exception ex)
             {
                 throw new InvalidOperationException(String.Format("Could not load configuration from '{0}'. Error was '{1}'", path, ex.Message), ex);
-            }            
+            }
+
+            try
+            {
+                //If the ScreenShot key exists in the registry, then startup is enabled.
+                RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+                ss.LaunchOnLogin = (key.GetValue("ScreenShot", null) != null);
+                
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(String.Format("Could not load configuration from registry'. Error was '{1}'", path, ex.Message), ex);
+            }
+
+            return ss;
         }
 
         /// <summary>
         /// Save the configuration to file
         /// </summary>
         /// <param name="path">The target configuration file</param>
-        public void SaveTo(string path)
+        public void Save(string path)
         {
             try
             {
@@ -179,6 +211,23 @@ namespace ScreenShot
             {
                 throw new InvalidOperationException(String.Format("Could not save configuration to '{0}'. Error was '{1}'", path, ex.Message), ex);                 
             }  
+
+            try
+            {
+                
+                //Update the registry
+                RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+                if (LaunchOnLogin) {
+                    key.SetValue("ScreenShot",String.Format("\"{0}\"",Application.ExecutablePath.ToString()));
+                } else {
+                    key.DeleteValue("ScreenShot");
+                }
+            } 
+            catch (Exception ex)
+            {               
+                throw new InvalidOperationException(String.Format("Could not save configuration to registry. Error was '{1}'", path, ex.Message), ex); 
+            }
+
         }
 
     }

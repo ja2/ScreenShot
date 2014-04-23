@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using ScreenShot.Code;
 
@@ -47,17 +48,7 @@ namespace ScreenShot
             }
 
         }
-
-        private void btnExit_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void btnHide_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
-
+        
         private void frmMain_Resize(object sender, EventArgs e)
         {
             if (this.WindowState == FormWindowState.Minimized)
@@ -76,6 +67,7 @@ namespace ScreenShot
             {
                 this.Hide();
                 LoadSettings();
+                InitWorker();
                 ShowInfo();
             }
             catch (Exception ex)
@@ -86,6 +78,16 @@ namespace ScreenShot
             
         }
 
+        private void InitWorker()
+        {
+            //Set the keyboard hook
+            _worker.SetHook();
+
+            //Set the event handler
+            _worker.ScreenShotComplete += _worker_ScreenShotComplete;
+        
+        }
+
         private void LoadSettings()
         {
 
@@ -93,10 +95,12 @@ namespace ScreenShot
             _configPath = System.IO.Path.Combine(Environment.CurrentDirectory, "ScreenShotSettings.config");
 
             //Start up the worker
-            var config = ScreenShotConfiguration.LoadFrom(_configPath);
+            var config = ScreenShotConfiguration.Load(_configPath);
             _worker = new Worker(config);
-            _worker.SetHook();
-            _worker.ScreenShotComplete += _worker_ScreenShotComplete;
+            
+            //Clear out existing bindings.
+            foreach (Control c in this.Controls)
+                c.DataBindings.Clear();
 
             //Set the screen control bindings
             txtKey.DataBindings.Add("Text", _worker.Config, "Key");
@@ -105,7 +109,8 @@ namespace ScreenShot
             chkCtrl.DataBindings.Add("Checked", _worker.Config, "Ctrl");
             chkWin.DataBindings.Add("Checked", _worker.Config, "Win");
             chkRightClick.DataBindings.Add("Checked", _worker.Config, "EnableRightClick");
-                        
+            chkLaunchOnLogin.DataBindings.Add("Checked", _worker.Config, "LaunchOnLogin");
+
         }
 
         private void ShowInfo()
@@ -128,10 +133,10 @@ namespace ScreenShot
             try
             {
                 //Save the file
-                _worker.Config.SaveTo(_configPath);
+                _worker.Config.Save(_configPath);
 
                 //Update the hook
-                _worker.SetHook();
+                _worker.SetHook();               
 
                 //Show the update
                 ShowInfo();
@@ -143,20 +148,31 @@ namespace ScreenShot
           
         }
 
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                LoadSettings();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ScreenShot", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (MessageBox.Show("Click OK to close. If you meant to hide the settings window, click Cancel, then click Hide",
+            if (MessageBox.Show("Click OK to close. If you meant to hide the settings window, click Cancel, then click Minimize",
                 "ScreenShot closing",
                 MessageBoxButtons.OKCancel,
                 MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.Cancel) e.Cancel = true;
         }
 
-        private void lnkGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void btnHelp_Click(object sender, EventArgs e)
         {
             Process.Start("https://github.com/ja2/ScreenShot");
         }
 
-
-
+        
     }
 }
