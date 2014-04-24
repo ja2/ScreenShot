@@ -87,12 +87,12 @@ namespace ScreenShot
 
         private void InitWorker()
         {
-            //Set the keyboard hook
-            _worker.SetHook();
-
             //Set the event handler
             _worker.ScreenShotComplete += _worker_ScreenShotComplete;
-        
+ 
+            //Set the keyboard hook
+            _worker.SetHook();
+                    
         }
 
         private void LoadSettings()
@@ -101,8 +101,20 @@ namespace ScreenShot
             //Set the config filename
             _configPath = System.IO.Path.Combine(Environment.CurrentDirectory, "ScreenShotSettings.config");
 
+            //Load the configuration. 
+            ScreenShotConfiguration config;
+            try {
+                config = ScreenShotConfiguration.Load(_configPath);
+            }
+            catch (Exception ex) 
+            {                    
+                MessageBox.Show(ex.Message, "ScreenShot", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                //For resilience, use the default settings if configuration cannot be loaded.
+                config = new ScreenShotConfiguration();
+            }
+
             //Start up the worker
-            var config = ScreenShotConfiguration.Load(_configPath);
             _worker = new Worker(config);
             
             //Clear out existing bindings.
