@@ -7,8 +7,7 @@ using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.ComponentModel;
 using Microsoft.Win32;
-
-using Newtonsoft.Json;
+using System.Web.Script.Serialization;
 
 namespace ScreenShot
 {
@@ -109,6 +108,7 @@ namespace ScreenShot
         /// Launch the application when the user logs in.
         /// </summary>
         /// <remarks>Stored in the the registy on a per-user basis</remarks>
+        [ScriptIgnore]
         public bool LaunchOnLogin
         {
             get { return _launchOnLogin; }
@@ -165,8 +165,11 @@ namespace ScreenShot
             {
                 //If file exists then load from the file, otherwise use the defaults
                 if (File.Exists(path)) {
+                    
                     var json = File.ReadAllText(path);
-                    ss = JsonConvert.DeserializeObject<ScreenShotConfiguration>(json);
+                    var serializer = new JavaScriptSerializer();
+
+                    ss = serializer.Deserialize<ScreenShotConfiguration>(json);
                 } else {
                     ss = new ScreenShotConfiguration();
                 }
@@ -201,7 +204,8 @@ namespace ScreenShot
             try
             {
                 //Serialize the config
-                var json = JsonConvert.SerializeObject(this);
+                var serializer = new JavaScriptSerializer();
+                var json = serializer.Serialize(this);
 
                 //Save to dis
                 File.WriteAllText(path,json);
@@ -217,10 +221,13 @@ namespace ScreenShot
                 
                 //Update the registry
                 RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-                if (LaunchOnLogin) {
+                if (LaunchOnLogin) {                    
+                    //Set the value
                     key.SetValue("ScreenShot",String.Format("\"{0}\"",Application.ExecutablePath.ToString()));
                 } else {
-                    key.DeleteValue("ScreenShot");
+                    //Delete the value if it exists
+                    if (key.GetValue("ScreenShot", null) != null) 
+                        key.DeleteValue("ScreenShot");
                 }
             } 
             catch (Exception ex)

@@ -8,7 +8,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using Microsoft.Win32;
-using Newtonsoft.Json;
 using ScreenShot.Code;
 
 namespace ScreenShot
@@ -21,7 +20,14 @@ namespace ScreenShot
         
         public frmMain()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ScreenShot", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         #region Window State Management
@@ -35,6 +41,7 @@ namespace ScreenShot
                     //On single click show dialog
                     this.Show();
                     this.WindowState = FormWindowState.Normal;
+                    this.BringToFront();
                     break;
 
                 case System.Windows.Forms.MouseButtons.Right:
@@ -162,7 +169,7 @@ namespace ScreenShot
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (MessageBox.Show("Click OK to close. If you meant to hide the settings window, click Cancel, then click Minimize",
+            if (MessageBox.Show("Click OK to exit ScreenShot. If you wish to hide the settings window and leave Screenshot running in the background, click Cancel, then click Minimize",
                 "ScreenShot closing",
                 MessageBoxButtons.OKCancel,
                 MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.Cancel) e.Cancel = true;
