@@ -5,7 +5,7 @@ Screen printing utility.
 
 **Use**
 
-On launch, sits in the notification area and monitors for a defined key combination (default is `Shift + Alt + S`) or (optionally) a right click on the application's icon.
+On launch, sits in the notification area and monitors for the defined key combination. When triggered, an image of the current screen (or current active window) is saved to the clipboard.  The default hotkey combinations are `Shift + Alt + S` for full screen, and `Shift + Alt + A` for the active window) or (optionally) a right click on the application's icon.
 
 To configure the utility, left click on the icon in the notification area.
 
@@ -20,16 +20,16 @@ Instead, using this app, the screenshot is saved to the remote clipboard directl
 
 **Configuration**
 
-To configure the hotkey, or to toggle the right-click functionality, left-click on the icon in the notification area.
+To configure the hotkeys, or to toggle the right-click functionality, left-click on the icon in the notification area.
 
 
 *Choosing a hotkey*
 
-The default hot key is `Shift + Alt + S`, however this may not always work, depending on what other software has set as its own hotkeys/shortcut keys.
+The default hotkeys are `Shift + Alt + S` for the full screen and `Shift + Alt + A` for the active window, however these may not always work, depending on what other software has set as it's own hotkeys/shortcut keys.
 
 It may be necessary to try a few combinations to see what works for you, especially the `Win` key (which probably won't work remotely, but is included for completeness).
 
-In general, use combinations with at least one of `Shift`, `Alt`, or `Ctrl` as this will give a better chance of avoiding conflict with other software.
+In general, use combinations with at least two of `Shift`, `Alt`, or `Ctrl` as this will give a better chance of avoiding conflict with other software.
 
 *Right Click*
 
@@ -60,6 +60,7 @@ ScreenShot requires a number of different security privileges to work:
 2. Registry access (for the Launch On Login functionality).
 3. Read-write file system access to the folder that the executable is run from, to save/read settings.
 4. Access to RegisterHotKey and UnregisterHotKey windows API commands to hook windows key combinations
+5. Access to the GetForegroundWindow and GetWindowRect to get the bounds of the currently active window
 
 *Trust*
 
