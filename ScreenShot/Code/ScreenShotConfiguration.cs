@@ -10,85 +10,22 @@ using Microsoft.Win32;
 using System.Web.Script.Serialization;
 
 namespace ScreenShot
+
+    
 {
+
+
     /// <summary>
     /// Configuration class to handle persistence of settings
     /// </summary>
     /// <remarks>
     /// Includes databinding functionality
     /// </remarks>
-    [Serializable()] 
     public class ScreenShotConfiguration: INotifyPropertyChanged
     {
-        /// <summary>
-        /// The base hotkey
-        /// </summary>
-        public char Key
-        {
-            get { return _key; }
-            set
-            {
-                _key = value;
-                InvokePropertyChanged("Key");
-            }
-        }
-        private char _key;
 
-        /// <summary>
-        /// Use the Ctrl key modifier
-        /// </summary>
-        public bool Ctrl
-        {
-            get { return _ctrl; }
-            set
-            {
-                _ctrl = value;
-                InvokePropertyChanged("Ctrl");
-            }
-        }
-        private bool _ctrl;
-
-        /// <summary>
-        /// Use the Alt key modifier
-        /// </summary>
-        public bool Alt
-        {
-            get { return _alt; }
-            set
-            {
-                _alt = value;
-                InvokePropertyChanged("Alt");
-            }
-        }
-        private bool _alt;
-
-        /// <summary>
-        /// Use the Alt key modifier
-        /// </summary>
-        public bool Shift
-        {
-            get { return _shift; }
-            set
-            {
-                _shift = value;
-                InvokePropertyChanged("Shift");
-            }
-        }
-        private bool _shift;
-
-        /// <summary>
-        /// Use the Win key modifier
-        /// </summary>
-        public bool Win
-        {
-            get { return _win; }
-            set
-            {
-                _win = value;
-                InvokePropertyChanged("Win");
-            }
-        }
-        private bool _win;
+        public ScreenShotKeyConfiguration FullScreenHotKey { get; set; }
+        public ScreenShotKeyConfiguration ActiveWindowHotKey {get;set;}
 
         /// <summary>
         /// Use the Win key modifier
@@ -121,7 +58,7 @@ namespace ScreenShot
         private bool _launchOnLogin;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public void InvokePropertyChanged(string name)
+        private void InvokePropertyChanged(string name)
         {
             var e = new PropertyChangedEventArgs(name);
             PropertyChangedEventHandler handler = PropertyChanged;
@@ -132,25 +69,26 @@ namespace ScreenShot
         /// Constructor sets defaults (S + Shift + Alt)
         /// </summary>
         public ScreenShotConfiguration()
-        {            
-            Key = 'S';
-            Ctrl = false;
-            Win = false;
-            Shift = true;
-            Alt = true;
+        {
+            FullScreenHotKey = new ScreenShotKeyConfiguration() { Key = 'S', Alt = true, Shift = true };
+            ActiveWindowHotKey = new ScreenShotKeyConfiguration { Key = 'A', Alt = true, Shift = true };
             EnableRightClick = true;
             LaunchOnLogin = false;
         }
 
+        /// <summary>
+        /// Override ToString to give full details of the configuration
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
-            return "Hot key is " 
-                + ((Ctrl) ? "Ctrl + " : "")
-                + ((Shift) ? "Shift + " : "")
-                + ((Alt) ? "Alt + " : "")
-                + ((Win) ? "Win + " : "")
-                + Key
-                + ((EnableRightClick) ? " or Right Click": "");
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("Full screen hot key is " + FullScreenHotKey.ToString());
+            sb.AppendLine("Active window hot key is " + ActiveWindowHotKey.ToString());
+            sb.AppendLine("Right click is " + (EnableRightClick ? "enabled" : "disabled"));
+            sb.AppendLine("Launch on login is " + (LaunchOnLogin ? "enabled" : "disabled"));
+
+            return sb.ToString();
         }
 
         /// <summary>
@@ -237,5 +175,117 @@ namespace ScreenShot
 
         }
 
+    }
+
+    /// <summary>
+    /// Configuration class to handle persistence of hot key configuration
+    /// </summary>
+    /// <remarks>
+    /// Includes databinding functionality
+    /// </remarks>
+    public class ScreenShotKeyConfiguration: INotifyPropertyChanged
+    {
+        /// <summary>
+        /// The base hotkey
+        /// </summary>
+        public char Key
+        {
+            get { return _key; }
+            set
+            {
+                _key = value;
+                InvokePropertyChanged("Key");
+            }
+        }
+        private char _key;
+
+        /// <summary>
+        /// Use the Ctrl key modifier
+        /// </summary>
+        public bool Ctrl
+        {
+            get { return _ctrl; }
+            set
+            {
+                _ctrl = value;
+                InvokePropertyChanged("Ctrl");
+            }
+        }
+        private bool _ctrl;
+
+        /// <summary>
+        /// Use the Alt key modifier
+        /// </summary>
+        public bool Alt
+        {
+            get { return _alt; }
+            set
+            {
+                _alt = value;
+                InvokePropertyChanged("Alt");
+            }
+        }
+        private bool _alt;
+
+        /// <summary>
+        /// Use the Alt key modifier
+        /// </summary>
+        public bool Shift
+        {
+            get { return _shift; }
+            set
+            {
+                _shift = value;
+                InvokePropertyChanged("Shift");
+            }
+        }
+        private bool _shift;
+
+        /// <summary>
+        /// Use the Win key modifier
+        /// </summary>
+        public bool Win
+        {
+            get { return _win; }
+            set
+            {
+                _win = value;
+                InvokePropertyChanged("Win");
+            }
+        }
+        private bool _win;
+        
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void InvokePropertyChanged(string name)
+        {
+            var e = new PropertyChangedEventArgs(name);
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, e);
+        }
+
+        /// <summary>
+        /// Constructor sets defaults (S + Shift + Alt)
+        /// </summary>
+        public ScreenShotKeyConfiguration()
+        {
+            Key = 'S';
+            Ctrl = false;
+            Win = false;
+            Shift = true;
+            Alt = true;
+        }
+                  
+        /// <summary>
+        /// Override ToString to give hotkey description
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return ((Ctrl) ? "Ctrl + " : "")
+                + ((Shift) ? "Shift + " : "")
+                + ((Alt) ? "Alt + " : "")
+                + ((Win) ? "Win + " : "")
+                + Key;
+        }
     }
 }

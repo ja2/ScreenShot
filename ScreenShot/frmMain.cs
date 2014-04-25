@@ -45,8 +45,8 @@ namespace ScreenShot
                     break;
 
                 case System.Windows.Forms.MouseButtons.Right:
-                    //Take screen grab if appropriate on double click
-                    if (_worker.Config.EnableRightClick) _worker.TakeScreenShot();
+                    //Take screen shot if appropriate on double click
+                    if (_worker.Config.EnableRightClick) _worker.TakeScreenShot(fullScreen:true);
                     break;
 
                 default:
@@ -122,11 +122,18 @@ namespace ScreenShot
                 c.DataBindings.Clear();
 
             //Set the screen control bindings
-            txtKey.DataBindings.Add("Text", _worker.Config, "Key");
-            chkAlt.DataBindings.Add("Checked", _worker.Config, "Alt");
-            chkShift.DataBindings.Add("Checked", _worker.Config, "Shift");
-            chkCtrl.DataBindings.Add("Checked", _worker.Config, "Ctrl");
-            chkWin.DataBindings.Add("Checked", _worker.Config, "Win");
+            txtFSKey.DataBindings.Add("Text", _worker.Config.FullScreenHotKey, "Key");
+            chkFSAlt.DataBindings.Add("Checked", _worker.Config.FullScreenHotKey, "Alt");
+            chkFSShift.DataBindings.Add("Checked", _worker.Config.FullScreenHotKey, "Shift");
+            chkFSCtrl.DataBindings.Add("Checked", _worker.Config.FullScreenHotKey, "Ctrl");
+            chkFSWin.DataBindings.Add("Checked", _worker.Config.FullScreenHotKey, "Win");
+
+            txtAWKey.DataBindings.Add("Text", _worker.Config.ActiveWindowHotKey, "Key");
+            chkAWAlt.DataBindings.Add("Checked", _worker.Config.ActiveWindowHotKey, "Alt");
+            chkAWShift.DataBindings.Add("Checked", _worker.Config.ActiveWindowHotKey, "Shift");
+            chkAWCtrl.DataBindings.Add("Checked", _worker.Config.ActiveWindowHotKey, "Ctrl");
+            chkAWWin.DataBindings.Add("Checked", _worker.Config.ActiveWindowHotKey, "Win");
+
             chkRightClick.DataBindings.Add("Checked", _worker.Config, "EnableRightClick");
             chkLaunchOnLogin.DataBindings.Add("Checked", _worker.Config, "LaunchOnLogin");
 

@@ -17,7 +17,20 @@ namespace ScreenShot.Code
         public delegate void ScreenShotCompleteHandler(object sender, EventArgs e);
         public event ScreenShotCompleteHandler ScreenShotComplete;
 
-        private IKeyboardHook _hook;
+        /// <summary>
+        /// Hook to control full screen hotkey
+        /// </summary>
+        private IKeyboardHook _fshook;
+
+        /// <summary>
+        /// Hook to control active window hotkey
+        /// </summary>
+        private IKeyboardHook _awhook;
+
+        /// <summary>
+        /// Access point for the User32 API commands.
+        /// </summary>
+        private User32API _user32Api;
 
         /// <summary>
         /// The configuration object that controls when screens are grabbed
@@ -29,29 +42,24 @@ namespace ScreenShot.Code
         /// </summary>
         /// <param name="config"></param>
         public Worker(ScreenShotConfiguration config)
-            :this(config,null)
+            :this(config,null,null,null)
         {}
 
         /// <summary>
         /// Constructor sets up the hookand registers the configuration
         /// </summary>
-        public Worker(ScreenShotConfiguration config, IKeyboardHook hook)
+        public Worker(ScreenShotConfiguration config, IKeyboardHook fshook, IKeyboardHook awhook, User32API user32Api)
         {
-            _hook = hook ?? new KeyboardHook();
-            _hook.KeyPressed += _hook_KeyPressed;
+            _fshook = fshook ?? new KeyboardHook();
+            _fshook.KeyPressed += (s,e) => TakeScreenShot(fullScreen:true);
+
+            _awhook = awhook ?? new KeyboardHook();
+            _awhook.KeyPressed += (s,e) => TakeScreenShot(fullScreen:false);
+
+            _user32Api = user32Api ?? new User32API();
             Config = config;     
         }
-
-        /// <summary>
-        /// Handler for the hook KeyUp event. Checks the modifiers then calls the screen shot.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void _hook_KeyPressed(object sender, KeyPressedEventArgs e)
-        {
-            //Call the screenshot
-            TakeScreenShot();
-        }
+        
 
         /// <summary>
         /// Resets the hooked key combination
@@ -60,10 +68,22 @@ namespace ScreenShot.Code
         {
 
             //Clear existing hooks
-            _hook.ClearHotKeys();
+            _fshook.ClearHotKeys();
+            _awhook.ClearHotKeys();
                        
             //Switch the hook listener key setting
-            _hook.RegisterHotKey(Config.Key, Config.Alt, Config.Ctrl, Config.Shift, Config.Win);
+            _fshook.RegisterHotKey(Config.FullScreenHotKey.Key, 
+                Config.FullScreenHotKey.Alt, 
+                Config.FullScreenHotKey.Ctrl,
+                Config.FullScreenHotKey.Shift,
+                Config.FullScreenHotKey.Win);
+
+            //Switch the hook listener key setting
+            _awhook.RegisterHotKey(Config.ActiveWindowHotKey.Key,
+                Config.ActiveWindowHotKey.Alt,
+                Config.ActiveWindowHotKey.Ctrl,
+                Config.ActiveWindowHotKey.Shift,
+                Config.ActiveWindowHotKey.Win);
             
         }
 
@@ -81,20 +101,34 @@ namespace ScreenShot.Code
         /// <summary>
         /// Take the screen print, then raise an event back to the UI
         /// </summary>
-        public void TakeScreenShot()
+        public void TakeScreenShot(bool fullScreen)
         {
 
-            //Get which screen to screenshot
-            var screen = Screen.FromPoint(Control.MousePosition);
+            Rectangle area;
 
+            if (fullScreen)
+            {
+                //Get which screen to screenshot
+                var screen = Screen.FromPoint(Control.MousePosition);
+
+                //Use the full screen bounds
+                area = screen.Bounds;
+            }
+            else
+            {
+                //Get the area of the active window
+                area = _user32Api.GetActiveWindowArea();
+            }
+
+            
             //Set the size of the image
-            Bitmap bmp = new Bitmap(screen.Bounds.Width, screen.Bounds.Height);
+            Bitmap bmp = new Bitmap(area.Width, area.Height);
 
             //Create a graphics
             Graphics g = Graphics.FromImage(bmp as Image);
 
-            //Take the screens
-            g.CopyFromScreen(screen.Bounds.Left, screen.Bounds.Top, 0, 0, bmp.Size);
+            //Take the screenshot
+            g.CopyFromScreen(area.Left, area.Top, 0, 0, area.Size);
 
             //Write to clipboard
             Clipboard.SetImage(bmp);
