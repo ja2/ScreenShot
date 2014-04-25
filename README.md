@@ -75,7 +75,7 @@ If you do not trust the built binary, then the source code is provided. This can
 Below are some guides on common error messages from ScreenShot. If you don't think that these cover a problem you're having, please raise an issue here in GitHub.
 
 
-*Couldn’t register the hot key.*
+> Couldn’t register the hot key.
 
 Some combinations of hotkey are not possible, either because they are already registered by some other application, or because they are illegal for some reason.
 
@@ -84,15 +84,15 @@ See the guide on "Choosing a hotkey" for more on different combinations of keys
 If no combination of hotkeys can be registered, then there is still the fallback feature available to right-click on the application icon on the system tray to take a ScreenShot.
 
 
-*Could not load configuration from '<A path>'. Error was '<An error>'*
-*Could not save configuration to '<A path>'. Error was '<An error>'*
+> Could not load configuration from '[A path]'. Error was '[An error]'<br/>
+> Could not save configuration to '[A path]'. Error was '[An error]'
 
 ScreenShot wasn't able to save its settings to file. The settings are saved in a ScreenShotSettings.config file in location that ScreenShot.exe is running from. If you have this problem try moving the ScreenShot.exe to a different location.
 
 The application should still work if this is the case, but it won't be possible to use anything other than the default settings for the application
 
-*Could not load configuration from registry'. Error was '<An error>'*
-*Could not save configuration to registry. Error was '<An error>'*
+> Could not load configuration from registry. Error was '[An error]'<br/>
+> Could not save configuration to registry. Error was '[An error]'
 
 ScreenShot wasn't able to read/update the registry to enable/disable the "Launch On Login" feature. Where this occurs it is likely to be due to the permission level of the user running ScreenShot.
 
