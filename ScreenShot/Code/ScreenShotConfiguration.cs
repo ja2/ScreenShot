@@ -127,7 +127,7 @@ namespace ScreenShot
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException(String.Format("Could not load configuration from registry'. Error was '{1}'", path, ex.Message), ex);
+                throw new InvalidOperationException(String.Format("Could not load configuration from registry. Error was '{1}'", path, ex.Message), ex);
             }
 
             return ss;
